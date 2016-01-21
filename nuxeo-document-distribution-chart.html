@@ -302,7 +302,7 @@ Example:
 
         _computeQueryFilter(path) {
           var result = [];
-          if (this.includeHidden) {
+          if (!this.includeHidden) {
             result.push({
               "constant_score": {
                   "filter": {
