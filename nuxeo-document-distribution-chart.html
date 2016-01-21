@@ -125,7 +125,7 @@ Example:
         <p/>
         <paper-checkbox on-change="execute" checked="{{includeVersion}}">Include Versions</paper-checkbox>
         <p/>
-        <paper-checkbox on-change="execute" checked="{{onlyFolder}}">Only Folders</paper-checkbox>
+        <paper-checkbox on-change="execute" checked="{{onlyFolder}}" disabled="[[_chechFolderDisabled(mode)]]">Only Folders</paper-checkbox>
         <p/>
         <paper-checkbox on-tap="_toggleLegend">Legend</paper-checkbox>
         <div id="legend" style="visibility: hidden;"></div>
@@ -161,7 +161,8 @@ Example:
 
           mode: {
             type: String,
-            value: 'size'
+            value: 'size',
+            observer: '_observeMode'
           },
 
           maxDepth: {
@@ -191,7 +192,7 @@ Example:
 
           _queryFiler: {
             type: Object,
-            computed: '_computeQueryFilter(path, includeHidden, includeVersion, includeDeleted, onlyFolder)'
+            computed: '_computeQueryFilter(mode, path, includeHidden, includeVersion, includeDeleted, onlyFolder)'
           },
 
           includeHidden: {
@@ -218,6 +219,16 @@ Example:
             type: Object
           }
 
+        },
+
+        _chechFolderDisabled: function(mode) {
+          return mode === 'size';
+        },
+
+        _observeMode: function() {
+          if (this.mode === 'size') {
+            this.onlyFolder = false;
+          }
         },
 
         _computeSizeQuery: function () {
@@ -313,7 +324,7 @@ Example:
 
         _computeQueryFilter(path) {
           var result = [];
-          if (this.onlyFolder) {
+          if (this.onlyFolder && this.mode !== 'size') {
             result.push({
               "constant_score": {
                   "filter": {
