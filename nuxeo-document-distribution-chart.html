@@ -214,6 +214,10 @@ Example:
             value: false
           },
 
+          _chartData: {
+            type: Object
+          }
+
         },
 
         _computeSizeQuery: function () {
@@ -465,6 +469,8 @@ Example:
             this._transformSubBuckets(aggregations.children[i]);
           }
 
+          this._chartData = aggregations;
+
           // Dimensions of sunburst.
           radius = Math.min(this.width, this.height) / 2;
 
@@ -489,7 +495,7 @@ Example:
               .innerRadius(function(d) { return Math.sqrt(d.y); })
               .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-          this._createVisualization(aggregations);
+          this._createVisualization();
 
         },
 
@@ -562,7 +568,7 @@ Example:
         },
 
         // Main function to draw and set up the visualization, once we have the data.
-        _createVisualization: function(aggregations) {
+        _createVisualization: function() {
 
           this._initializeBreadcrumbTrail();
           this._drawLegend();
@@ -574,12 +580,12 @@ Example:
               .style("opacity", 0);
 
           // For efficiency, filter nodes to keep only those large enough to see.
-          var nodes = partition.nodes(aggregations)
+          var nodes = partition.nodes(this._chartData)
               .filter(function(d) {
               return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
               });
 
-          var path = vis.data([aggregations]).selectAll("path")
+          var path = vis.data([this._chartData]).selectAll("path")
               .data(nodes)
               .enter().append("svg:path")
               .attr("display", function(d) { return d.depth ? null : "none"; })
