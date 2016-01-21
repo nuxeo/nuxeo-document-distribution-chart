@@ -30,13 +30,13 @@ A sunburst chart presenting Nuxeo Document Distribution.
 Example:
 
     <nuxeo-document-distribution-chart index="nuxeo"
-      path="/default-domain" mode="count" maxDepth="7"
+      path="/default-domain" mode="count" max-depth="7"
       chart-hue="red" chart-lumonisity="light"
       include-version="true" include-hidden="true"
       include-deleted="true" only-folder="false">
     </nuxeo-document-distribution-chart>
 
-@group Nuxeo Data Elements
+@group Nuxeo UI
 @element nuxeo-document-distribution-chart
 @demo demo/document-distribution.html
 -->
@@ -149,42 +149,67 @@ Example:
             value: 'nx'
           },
 
+          /**
+           * The name of the index.
+           */
           index: {
             type: String,
             value: 'nuxeo'
           },
 
+          /**
+           * Path of the document to scan. For instance '/default-domain/workspaces'.
+           * Leave blank to scan the full repository.
+           */
           path: {
             type: String,
             value: ''
           },
 
+          /**
+           * Possible values are 'size' for Document size or 'count' for Document count.
+           */
           mode: {
             type: String,
             value: 'size',
             observer: '_observeMode'
           },
 
+          /**
+           * Maximum depth to scan in the hierarchy.
+           */
           maxDepth: {
             type: Number,
             value: 10
           },
 
+          /**
+           * Possible values are 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink' and 'monochrome'.
+           */
           chartLuminosity: {
             type: String,
             value: 'light'
           },
 
+          /**
+           * Possible values are 'bright', 'light' or 'dark'.
+           */
           chartHue: {
             type: String,
             value: 'blue'
           },
 
+          /**
+           * Chart width.
+           */
           width: {
             type: Number,
             value: 750
           },
 
+          /**
+           * Chart height.
+           */
           height: {
             type: Number,
             value: 600
@@ -195,21 +220,35 @@ Example:
             computed: '_computeQueryFilter(mode, path, includeHidden, includeVersion, includeDeleted, onlyFolder)'
           },
 
+          /**
+           * To take into account hidden Documents (i.e. Documents with HiddenInNavigation facet).
+           */
           includeHidden: {
             type: Boolean,
             value: false
           },
 
+          /**
+           * To take into account Versions in the size/count computation.
+           *
+           * LIMITATION: the size of Versions are not properly taken into account in the final result.
+           */
           includeVersion: {
             type: Boolean,
             value: false
           },
 
+          /**
+           * To take into account deleted Documents (i.e. Documents with lifecycle deleted).
+           */
           includeDeleted: {
             type: Boolean,
             value: true
           },
 
+          /**
+           * To take into account folder Documents (i.e. Documents with Folderish facet).
+           */
           onlyFolder: {
             type: Boolean,
             value: false
