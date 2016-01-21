@@ -1,0 +1,109 @@
+<!doctype html>
+<!--
+@license
+(C) Copyright 2015 Nuxeo SA (http://nuxeo.com/) and contributors.
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the GNU Lesser General Public License
+(LGPL) version 2.1 which accompanies this distribution, and is available at
+http://www.gnu.org/licenses/lgpl.html
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+Contributors:
+  Guillaume Renard <grenard@nuxeo.com>
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../test-fixture/test-fixture-mocha.js"></script>
+
+    <link rel="import" href="../../polymer/polymer.html">
+    <link rel="import" href="../../test-fixture/test-fixture.html">
+    <link rel="import" href="../nuxeo-document-distribution-chart.html">
+  </head>
+  <body>
+    <test-fixture id="nx">
+      <template>
+        <nuxeo-connection url="/dummy"></nuxeo-connection>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="includeAll">
+      <template>
+        <nuxeo-document-distribution-chart index="nuxeo"
+          path="/default-domain" mode="count" maxDepth="7"
+          chart-hue="red" chart-lumonisity="light"
+          include-version="true" include-hidden="true"
+          include-deleted="true">
+        </nuxeo-document-distribution-chart>
+      </template>
+    </test-fixture>
+
+    <script>
+
+      suite('<nuxeo-document-distribution-chart>', function() {
+
+        var server;
+
+        setup(function() {
+          server = sinon.fakeServer.create();
+          server.respondWith(
+              'POST',
+              '/dummy/site/api/v1/automation/login',
+              [
+                200,
+                {'Content-Type': 'application/json'},
+                '{"entity-type": "login"}'
+              ]
+          );
+
+          // login
+          var nx = fixture('nx');
+          var promise = nx.connect();
+          server.respond();
+          return promise;
+        });
+
+        test('includeAll', function() {
+          var search = fixture('includeAll');
+
+           return fakeResponse(search, {
+            }
+          }).then(function() {
+            // TODO
+          });
+        });
+
+        function fakeResponse(search, json) {
+          server.respondWith(
+              'POST',
+              '/dummy/site/es/audit/_search?search_type=count',
+              [
+                200,
+                {'Content-Type': 'application/json'},
+                JSON.stringify(json)
+              ]
+          );
+
+          var promise = search.fetch();
+
+          Polymer.Base.async(function() {
+            server.respond();
+          });
+
+          return promise;
+        }
+
+      });
+    </script>
+
+  </body>
+</html>
