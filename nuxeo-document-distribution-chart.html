@@ -29,7 +29,9 @@ Example:
 
     <nuxeo-document-distribution-chart index="nuxeo"
       path="/default-domain" mode="count" maxDepth="7"
-      chart-hue="red" chart-lumonisity="light">
+      chart-hue="red" chart-lumonisity="light"
+      include-version="true" include-hidden="true"
+      include-deleted="true">
     </nuxeo-document-distribution-chart>
 
 @group Nuxeo Data Elements
@@ -298,7 +300,6 @@ Example:
 
         _computeQueryFilter(path) {
           var result = [];
-          console.log('aasdhd');
           if (this.includeHidden) {
             result.push({
               "constant_score": {
