@@ -27,8 +27,8 @@ A sunburst chart presenting Nuxeo Document Distribution.
 
 Example:
 
-    <nuxeo-document-distribution-chart maxDepth="7"
-      path="/default-domain" mode="count"
+    <nuxeo-document-distribution-chart index="nuxeo"
+      path="/default-domain" mode="count" maxDepth="7"
       chart-hue="red" chart-lumonisity="light">
     </nuxeo-document-distribution-chart>
 
@@ -114,6 +114,13 @@ Example:
           <paper-radio-button name="size">Size</paper-radio-button>
           <paper-radio-button name="count">Document Count</paper-radio-button>
         </paper-radio-group>
+        <p/>
+        <paper-checkbox on-change="execute" checked="{{includeHidden}}">Include Hidden Documents</paper-checkbox>
+        <p/>
+        <paper-checkbox on-change="execute" checked="{{includeDeleted}}">Include Deleted Document</paper-checkbox>
+        <p/>
+        <paper-checkbox on-change="execute" checked="{{includeVersion}}">Include Versions</paper-checkbox>
+        <p/>
         <paper-checkbox on-tap="_toggleLegend">Legend</paper-checkbox>
         <div id="legend" style="visibility: hidden;"></div>
       </div>
@@ -176,9 +183,24 @@ Example:
             value: 600
           },
 
-          queryFiler: {
+          _queryFiler: {
             type: Object,
-            computed: '_computeQueryFilter(path)'
+            computed: '_computeQueryFilter(path, includeHidden, includeVersion, includeDeleted)'
+          },
+
+          includeHidden: {
+            type: Boolean,
+            value: false
+          },
+
+          includeVersion: {
+            type: Boolean,
+            value: false
+          },
+
+          includeDeleted: {
+            type: Boolean,
+            value: true
           }
 
         },
@@ -214,7 +236,7 @@ Example:
           query = {
             "query": {
               "bool": {
-                  "must": this.queryFiler
+                  "must": this._queryFiler
               }
             },
             "size": 0,
@@ -265,7 +287,7 @@ Example:
           query = {
             "query": {
               "bool": {
-                  "must": this.queryFiler
+                  "must": this._queryFiler
               }
             },
             "size": 0,
@@ -276,19 +298,48 @@ Example:
 
         _computeQueryFilter(path) {
           var result = [];
-          result.push({
-            "constant_score": {
-                "filter": {
-                    "not": {
-                        "filter": {
-                            "term": {
-                                "ecm:mixinType": "HiddenInNavigation"
-                            }
-                        }
-                    }
+          console.log('aasdhd');
+          if (this.includeHidden) {
+            result.push({
+              "constant_score": {
+                  "filter": {
+                      "not": {
+                          "filter": {
+                              "term": {
+                                  "ecm:mixinType": "HiddenInNavigation"
+                              }
+                          }
+                      }
+                  }
+              }
+            });
+          }
+          if (!this.includeVersion) {
+            result.push({
+              "constant_score" : {
+                "filter" : {
+                  "term" : {
+                    "ecm:isVersion" : "0"
+                  }
                 }
-            }
-          });
+              }
+            });
+          }
+          if (!this.includeDeleted) {
+            result.push({
+              "constant_score" : {
+                "filter" : {
+                  "not" : {
+                    "filter" : {
+                      "term" : {
+                        "ecm:currentLifeCycleState" : "deleted"
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          }
           if (path && path.length > 0) {
             var split = path.split('/');
             for (var i = 1; i < split.length; i++) {
