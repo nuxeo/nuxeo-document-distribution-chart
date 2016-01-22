@@ -4,6 +4,10 @@
 
 **Nuxeo Document Distribution Chart** is a Polymer element for displaying Document distribution of a Nuxeo repository within a sunurst chart built upon d3js.
 
+## Limitations
+
+The *size* mode does not properly take into account the size of the Versions of Documents.
+
 ## Dependencies
 
 Element dependencies are managed via [Bower](http://bower.io/). You can
@@ -53,7 +57,7 @@ Then, you can run your tests on _all_ of your local browsers via:
 
 ## Documentation
 
-- [Online](http://nuxeo.github.io/nuxeo-document-distribution-chart-master) reference and demos.
+- [Online](http://nuxeo.github.io/nuxeo-document-distribution-chart/components/nuxeo-document-distribution-chart/) reference and demos.
 
 ## Report & Contribute
 
