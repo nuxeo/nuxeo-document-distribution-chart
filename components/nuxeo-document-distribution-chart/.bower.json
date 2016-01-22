@@ -1,0 +1,46 @@
+{
+  "name": "nuxeo-document-distribution-chart",
+  "authors": [
+    "Guillaume Renard <grenard@nuxeo.com>"
+  ],
+  "description": "A sunburst chart to visualize Document distribution in a Nuxeo repository",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "nuxeo",
+    "metrics",
+    "d3js"
+  ],
+  "main": "nuxeo-document-distribution-chart.html",
+  "license": "LGPL",
+  "homepage": "https://github.com/nuxeo/nuxeo-document-distribution-chart/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.4",
+    "nuxeo-elements": "nuxeo/nuxeo-elements#^0.2.0",
+    "d3": "~3.5.12",
+    "randomcolor": "~0.4.2",
+    "paper-radio-group": "PolymerElements/paper-radio-group#~1.0.9",
+    "paper-radio-button": "PolymerElements/paper-radio-button#~1.0.12",
+    "paper-checkbox": "PolymerElements/paper-checkbox#~1.1.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#1.0.5",
+    "moment": "2.10.6",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "web-component-tester": "*"
+  },
+  "_release": "8581193414",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "858119341476fc6e5aee54691596c78fc2cd7e9c"
+  },
+  "_source": "git://github.com/nuxeo/nuxeo-document-distribution-chart.git",
+  "_target": "master",
+  "_originalSource": "nuxeo/nuxeo-document-distribution-chart",
+  "_direct": true
+}
