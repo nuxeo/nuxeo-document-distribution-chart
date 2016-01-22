@@ -12,6 +12,7 @@
     "metrics",
     "d3js"
   ],
+  "main": "nuxeo-document-distribution-chart.html",
   "license": "LGPL",
   "homepage": "https://github.com/nuxeo/nuxeo-document-distribution-chart/",
   "ignore": [
