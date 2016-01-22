@@ -4,6 +4,16 @@
 
 **Nuxeo Document Distribution Chart** is a Polymer element for displaying Document distribution of a Nuxeo repository within a sunurst chart built upon d3js.
 
+## Requirements
+
+This element requires Nuxeo 8.2 platform or greater.
+
+This element needs the elasticsearch passthrough enabled. Add the following property in nuxeo.conf:
+
+    elasticsearch.httpEnabled=true
+
+See [Documentation](https://doc.nuxeo.com/x/5Y_RAQ).
+
 ## Limitations
 
 The *size* mode does not properly take into account the size of the Versions of Documents.
