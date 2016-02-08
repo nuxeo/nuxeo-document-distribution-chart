@@ -464,6 +464,7 @@ Example:
                 url: url,
                 method: 'POST',
                 headers: headers,
+                withCredentials: true,
                 body: query,
                 handleAs: 'json'
               }).then(this._handleResponse.bind(this)).catch(this._handleError.bind(this));
