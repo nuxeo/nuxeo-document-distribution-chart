@@ -17,8 +17,6 @@ Contributors:
     Guillaume Renard <grenard@nuxeo.com>
 -->
 <link rel="import" href="../nuxeo-elements/nuxeo-connection.html">
-<link rel="import" href="../iron-ajax/iron-request.html">
-<link rel="import" href="../iron-ajax/iron-request.html">
 <link rel="import" href="../paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <script src="../d3/d3.min.js"></script>
@@ -448,26 +446,18 @@ Example:
           url = url.replace(/(^\/+)|([^:])\/\/+/g, '$2/');
 
           if (this.type) { url += '?search_type=' + this.type; }
-
-          // add auth headers
-          var auth = {'Content-Type': 'application/json'};
-          this.$.nx.client._computeAuthentication(auth);
-
-          // Normalize headers in lower case
-          var headers = {};
-          for (var header in auth) {
-            headers[header.toLowerCase()] = auth[header].toString();
-          }
-
-          return document.createElement('iron-request')
-              .send({
-                url: url,
-                method: 'POST',
-                headers: headers,
-                withCredentials: true,
-                body: query,
-                handleAs: 'json'
-              }).then(this._handleResponse.bind(this)).catch(this._handleError.bind(this));
+          var options = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: query,
+            url: url
+          };
+          return this.$.nx.request().then(function(request) {
+            return request
+              .execute(options)
+              .then(this._handleResponse.bind(this))
+              .catch(this._handleError.bind(this))
+          }.bind(this));
         },
 
         _handleError: function(reason) {
@@ -478,8 +468,7 @@ Example:
           });
         },
 
-        _handleResponse: function(request) {
-          var response = request.response;
+        _handleResponse: function(response) {
           return this._buildSunBurst(response.aggregations);
         },
 
