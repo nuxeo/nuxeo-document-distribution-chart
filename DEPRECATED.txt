@@ -1,0 +1,3 @@
+This repository is deprecated.
+
+nuxeo-document-distribution-chart has been moved to [nuxeo-ui-elements](https://github.com/nuxeo/nuxeo-ui-elements)
